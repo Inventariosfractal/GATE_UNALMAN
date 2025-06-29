@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encuesta FCHS - Universidad Nacional de Colombia</title>
+    <style>
+        :root {
+            --verde-institucional: #94C11F;
+            --verde-oscuro: #006531;
+            --rojo-alterno: #B5282D;
+            --gris-claro: #F5F5F5;
+            --gris-medio: #CCCCCC;
+            --gris-oscuro: #666666;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: -apple-system, Arial, sans-serif;
+            background: var(--gris-claro);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .header {
+            padding: 40px 40px 30px;
+            text-align: center;
+            border-bottom: 4px solid var(--verde-institucional);
+        }
+        
+        .institution-name {
+            font-size: 24px;
+            font-weight: 400;
+            margin-bottom: 5px;
+        }
+        
+        .institution-name .nacional {
+            font-weight: 700;
+            color: var(--verde-oscuro);
+        }
+        
+        .main-content { padding: 40px; }
+        
+        h1 {
+            color: var(--verde-oscuro);
+            font-size: 32px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: var(--gris-oscuro);
+            margin-bottom: 30px;
+            font-size: 16px;
+            font-style: italic;
+        }
+        
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        
+        input[type="email"] {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid var(--gris-medio);
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        input[type="email"]:focus {
+            outline: none;
+            border-color: var(--verde-institucional);
+        }
+        
+        .button {
+            width: 100%;
+            padding: 15px;
+            background: var(--verde-oscuro);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            font-weight: 700;
+            cursor: pointer;
+            text-transform: uppercase;
+        }
+        
+        .button:hover {
+            background: var(--verde-institucional);
+            color: #000;
+        }
+        
+        .result {
+            margin-top: 20px;
+            padding: 20px;
+            border-radius: 4px;
+            display: none;
+            border: 2px solid;
+        }
+        
+        .success {
+            background: rgba(148, 193, 31, 0.1);
+            border-color: var(--verde-institucional);
+            color: var(--verde-oscuro);
+        }
+        
+        .error {
+            background: rgba(181, 40, 45, 0.1);
+            border-color: var(--rojo-alterno);
+            color: var(--rojo-alterno);
+        }
+        
+        .form-button {
+            display: inline-block;
+            margin-top: 15px;
+            padding: 12px 30px;
+            background: var(--verde-oscuro);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+        
+        .info-box {
+            background: var(--gris-claro);
+            border-left: 4px solid var(--verde-institucional);
+            padding: 20px;
+            margin-top: 30px;
+            font-size: 14px;
+            color: var(--gris-oscuro);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            background: var(--gris-claro);
+            color: var(--gris-oscuro);
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="institution-name">
+                Universidad <span class="nacional">Nacional</span> de Colombia
+            </div>
+            <div style="color: #666; font-style: italic;">Sede Manizales</div>
+        </div>
+        
+        <div class="main-content">
+            <h1>Encuesta FCHS</h1>
+            <p class="subtitle">
+                Posición y Mandato sobre la Creación de la<br>
+                Facultad de Ciencias Humanas y Sociales
+            </p>
+            
+            <label for="email">Correo electrónico institucional</label>
+            <input type="email" id="email" placeholder="usuario@unal.edu.co" required>
+            <button class="button" onclick="verificar()">Verificar Acceso</button>
+            
+            <div id="result" class="result"></div>
+            
+            <div class="info-box">
+                <strong>IMPORTANTE:</strong> Esta encuesta está dirigida exclusivamente a los profesores de la Sede Manizales.
+            </div>
+        </div>
+        
+        <div class="footer">
+            UNAL · Universidad Nacional de Colombia<br>
+            Sede Manizales · Sistema de Validación
+        </div>
+    </div>
+
+    <script>
+        const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSeYQIDIHVO8h9YnkKqZ5_-OLOGftfSSPOK7m93GBxkFAVvA4w/viewform';
+        
+        const CORREOS = ['amgiraldoo@unal.edu.co','alcuestame@unal.edu.co','aagudeloa@unal.edu.co','asepulvedag@unal.edu.co','apagudelosa@unal.edu.co','acuellarb@unal.edu.co','alvgomezp@unal.edu.co','ahsalass@unal.edu.co','aopulzaram@unal.edu.co','azapatago@unal.edu.co','alhurtadou@unal.edu.co','apnoguerad@unal.edu.co','amarulandam@unal.edu.co','aaosoriolo@unal.edu.co','aesatizabalv@unal.edu.co','aepazgo@unal.edu.co','aflopezv@unal.edu.co','anfrojasgo@unal.edu.co','afroldang@unal.edu.co','anroldang@unal.edu.co','afsanchezj@unal.edu.co','amalvarezme@unal.edu.co','arosalesr@unal.edu.co','asalasmo@unal.edu.co','ajustarizf@unal.edu.co','aymartinezar@unal.edu.co','bsegurag@unal.edu.co','bjruizm@unal.edu.co','cemejiac@unal.edu.co','camramirezma@unal.edu.co','cyounesv@unal.edu.co','cabermudezm@unal.edu.co','caruizvi@unal.edu.co','ccardonaal@unal.edu.co','cdacostam@unal.edu.co','cmurillo@unal.edu.co','cemarulandae@unal.edu.co','ceorregoa@unal.edu.co','ceriospi@unal.edu.co','cvargash@unal.edu.co','cyanezc@unal.edu.co','csalazaro@unal.edu.co','carangol@unal.edu.co','cgcastellanosd@unal.edu.co','cmalvarezg@unal.edu.co','cmendozab@unal.edu.co','crdcorreaal@unal.edu.co','dahlopezgar@unal.edu.co','dtflorezq@unal.edu.co','daariast@unal.edu.co','dabedoyar@unal.edu.co','dosoriob@unal.edu.co','dtorresce@unal.edu.co','dangulog@unal.edu.co','demolinac@unal.edu.co','dlocampor@unal.edu.co','dmsoteloca@unal.edu.co','dmcardenasa@unal.edu.co','dmsanchezm@unal.edu.co','daescobarga@unal.edu.co','daalvarez@unal.edu.co','dchavezc@unal.edu.co','ddramirezra@unal.edu.co','eflunan@unal.edu.co','erojasca@unal.edu.co','ehenaoc@unal.edu.co','eacanopl@unal.edu.co','ejvillegasj@unal.edu.co','erestrepopa@unal.edu.co','esolorzano@unal.edu.co','edloperar@unal.edu.co','eduquees@unal.edu.co','ffserranos@unal.edu.co','fhlopezv@unal.edu.co','famesar@unal.edu.co','frinconc@unal.edu.co','fangulog@unal.edu.co','fagallegol@unal.edu.co','fagonzalez@unal.edu.co','fagallegor@unal.edu.co','faroldanh@unal.edu.co','fjgarciaor@unal.edu.co','fjvalenciad@unal.edu.co','fnjimenezg@unal.edu.co','flfrancoi@unal.edu.co','fbecerraro@unal.edu.co','geescobara@unal.edu.co','ghbarrenecher@unal.edu.co','gacastanod@unal.edu.co','gaosorioz@unal.edu.co','gidarragap@unal.edu.co','gflorezr@unal.edu.co','gvargasa@unal.edu.co','giguzmansa@unal.edu.co','ghbustamante@unal.edu.co','gmedinaar@unal.edu.co','gadabbracciok@unal.edu.co','gaagredoc@unal.edu.co','gaosoriol@unal.edu.co','gdguzmanr@unal.edu.co','gjimenezob@unal.edu.co','hjosoriozu@unal.edu.co','hsbarcor@unal.edu.co','hquinterov@unal.edu.co','hvivasc@unal.edu.co','hhortiza@unal.edu.co','imcholoc@unal.edu.co','illanosc@unal.edu.co','idlopezl@unal.edu.co','ifmaciasq@unal.edu.co','ikcollazoss@unal.edu.co','idobrosz-gomez@unal.edu.co','jafigueroaf@unal.edu.co','jaiagiraldog@unal.edu.co','jalondonol@unal.edu.co','jasepulvedag@unal.edu.co','javieiras@unal.edu.co','jaarangom@unal.edu.co','jbuitragoa@unal.edu.co','jearangoca@unal.edu.co','jaayalamo@unal.edu.co','japaredesl@unal.edu.co','jdagudeloc@unal.edu.co','jfontalvoa@unal.edu.co','jicarrerom@unal.edu.co','jolozanoe@unal.edu.co','jdzambranona@unal.edu.co','jquinonesc@unal.edu.co','jjsepulvedal@unal.edu.co','gfcardona@unal.edu.co','jfherrerag@unal.edu.co','jnsuarezh@unal.edu.co','jurreaa@unal.edu.co','jjsalazarb@unal.edu.co','jjsalinas@unal.edu.co','jatamayoar@unal.edu.co','joaforerosa@unal.edu.co','jagalindod@unal.edu.co','jaaristizabalar@unal.edu.co','jegiraldoarb@unal.edu.co','jehurtadog@unal.edu.co','jhestradae@unal.edu.co','jharcilal@unal.edu.co','jijurados@unal.edu.co','jjvelezu@unal.edu.co','jcchanchigo@unal.edu.co','jfmunozr@unal.edu.co','jgcarvajalo@unal.edu.co','jhparrasa@unal.edu.co','jhramirezfra@unal.edu.co','jicardenasj@unal.edu.co','jfrancoh@unal.edu.co','jbgomezm@unal.edu.co','jcchicam@unal.edu.co','jccorderoc@unal.edu.co','jchiguitav@unal.edu.co','jcrianoro@unal.edu.co','jubastidasr@unal.edu.co','jdmarinj@unal.edu.co','jfpunebam@unal.edu.co','jghurtadoi@unal.edu.co','jgocampoh@unal.edu.co','jjosorioval@unal.edu.co','jmcastanom@unal.edu.co','jmsarmienton@unal.edu.co','jphernand@unal.edu.co','jcnaranjov@unal.edu.co','jaosorioos@unal.edu.co','jcgarciaa@unal.edu.co','klopezb@unal.edu.co','lpgiraldov@unal.edu.co','lbermona@unal.edu.co','llpalomap@unal.edu.co','lzapatao@unal.edu.co','lmzuluagag@unal.edu.co','ljmartinezhe@unal.edu.co','lalvarezm@unal.edu.co','luacarmonasa@unal.edu.co','lemorenom@unal.edu.co','leavendano@unal.edu.co','lfacebedor@unal.edu.co','lfcastilloos@unal.edu.co','lfcorteshe@unal.edu.co','lfdiazc@unal.edu.co','lfmadridz@unal.edu.co','lfmontesl@unal.edu.co','lfmotatoro@unal.edu.co','lfmulcuen@unal.edu.co','lilopezv@unal.edu.co','lrvasquezv@unal.edu.co','laaristizabalq@unal.edu.co','laramirezc@unal.edu.co','leguerrerom@unal.edu.co','lmvelasqueza@unal.edu.co','lscardonam@unal.edu.co','malopeztr@unal.edu.co','mabenavidesl@unal.edu.co','mmsierram@unal.edu.co','maherrerahu@unal.edu.co','maprietot@unal.edu.co','mdrodriguezco@unal.edu.co','mebecerrah@unal.edu.co','mrojashe@unal.edu.co','martdavilaa@unal.edu.co','mdgiraldori@unal.edu.co','mcramiress@unal.edu.co','mapantojao@unal.edu.co','macardonaji@unal.edu.co','mescobaror@unal.edu.co','morozcoa@unal.edu.co','magomez@unal.edu.co','mbautistap@unal.edu.co','mrlopezg@unal.edu.co','nrsanabriag@unal.edu.co','nprietoc@unal.edu.co','nguerrerog@unal.edu.co','naristizaball@unal.edu.co','ndgonzalezho@unal.edu.co','ndduqueme@unal.edu.co','nmontoyamo@unal.edu.co','nlruizg@unal.edu.co','nesteband@unal.edu.co','nlmontesc@unal.edu.co','oramirezga@unal.edu.co','ofollecos@unal.edu.co','oatapascoa@unal.edu.co','odcastrillong@unal.edu.co','odcardonaa@unal.edu.co','oltorresj@unal.edu.co','ovalenciaro@unal.edu.co','oaprador@unal.edu.co','osccorreac@unal.edu.co','oemezaa@unal.edu.co','ohfrancob@unal.edu.co','ohgiraldoo@unal.edu.co','omdiazb@unal.edu.co','pfmarinc@unal.edu.co','paescandon@unal.edu.co','pccuellars@unal.edu.co','pjarangoa@unal.edu.co','pchang@unal.edu.co','ppinedag@unal.edu.co','rbetancourtg@unal.edu.co','rrovira@unal.edu.co','rarojasm@unal.edu.co','ratolosac@unal.edu.co','rdgalvism@unal.edu.co','sbvargasg@unal.edu.co','sxcarvajalq@unal.edu.co','sbaezp@unal.edu.co','saariasgu@unal.edu.co','sruizhe@unal.edu.co','shloperapr@unal.edu.co','scasanovat@unal.edu.co','snrodriguezba@unal.edu.co','shernandezn@unal.edu.co','tgiraldoo@unal.edu.co','ubustamantel@unal.edu.co','vmejiaa@unal.edu.co','vtabaresm@unal.edu.co','vevalenciam@unal.edu.co','vmejiab@unal.edu.co','wrlopez@unal.edu.co','wasarachec@unal.edu.co','wmliconac@unal.edu.co'];
+        
+        function verificar() {
+            const email = document.getElementById('email').value.trim().toLowerCase();
+            const result = document.getElementById('result');
+            
+            if (!email || !email.endsWith('@unal.edu.co')) {
+                result.className = 'result error';
+                result.innerHTML = '<h3>Error</h3><p>Por favor ingrese un correo institucional válido (@unal.edu.co)</p>';
+                result.style.display = 'block';
+                return;
+            }
+            
+            if (CORREOS.includes(email)) {
+                result.className = 'result success';
+                result.innerHTML = `
+                    <h3>✓ Acceso Autorizado</h3>
+                    <p><strong>Bienvenido(a) profesor(a)</strong></p>
+                    <p>Correo verificado: <strong>${email}</strong></p>
+                    <a href="${FORM_URL}" class="form-button" target="_blank">Ir al Formulario →</a>
+                `;
+                result.style.display = 'block';
+                
+                setTimeout(() => {
+                    window.open(FORM_URL, '_blank');
+                }, 2000);
+            } else {
+                result.className = 'result error';
+                result.innerHTML = `
+                    <h3>⚠ Acceso No Autorizado</h3>
+                    <p>El correo <strong>${email}</strong> no está autorizado.</p>
+                    <p>Si considera que esto es un error, contacte a la representación profesoral.</p>
+                `;
+                result.style.display = 'block';
+            }
+        }
+        
+        document.getElementById('email').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') verificar();
+        });
+    </script>
+</body>
+</html>
